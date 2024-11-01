@@ -1,16 +1,20 @@
 package main
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/rusinikita/goviz/internal"
 )
 
-const (
-	projectDir         = "/Users/nikitarusin/Repositories/replace_me"
-	pathPrefixToRemove = "github.com/rusinikita/replace_me/"
-)
-
 func main() {
-	code := internal.Compile(projectDir, pathPrefixToRemove)
+	args := os.Args
+	if len(args) < 2 {
+		fmt.Println("Usage: goviz <project dir>")
+		os.Exit(1)
+	}
+
+	code := internal.Compile(args[1])
 
 	internal.RenderFiles(code)
 }

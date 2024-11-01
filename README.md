@@ -6,14 +6,8 @@ Go repository architecture visualization
 
 # Usage
 
-1. Clone repository
-2. Download dependencies
+1. Run program with project folder
 ```shell
-go mod tidy
+go run github.com/rusinikita/goviz /Users/nikitarusin/Repositories/go-clean-architecture
 ```
-3. Replace value of `projectDir` and `pathPrefixToRemove` with your local repository values
-4. Run app
-```shell
-go run main.go
-```
-5. Open `result.html` file in browser
+2. Open `result.html` file in browser

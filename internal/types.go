@@ -37,10 +37,12 @@ func NewStruct(s *types.Struct, n *types.Named, pref string) *Struct {
 	var includes []string
 	var componentDeps int
 
+	name := strings.TrimPrefix(n.String(), pref)
+
 	for i := 0; i < s.NumFields(); i++ {
 		t := s.Field(i).Type()
 
-		path := t.String()
+		path := strings.TrimPrefix(t.String(), "*")
 		if !strings.HasPrefix(path, pref) {
 			continue
 		}
@@ -54,11 +56,11 @@ func NewStruct(s *types.Struct, n *types.Named, pref string) *Struct {
 	}
 
 	return &Struct{
-		name:      strings.TrimPrefix(n.String(), pref),
+		name:      name,
 		_type:     n,
 		s:         s,
 		includes:  includes,
-		component: true, //componentDeps > 0 && n.NumMethods() > 0,
+		component: n.NumMethods() > 0,
 	}
 }
 

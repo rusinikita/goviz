@@ -16,7 +16,7 @@ type CompileResult struct {
 	constructors []*Constructor
 }
 
-func Compile(projectDir, pathPrefixToRemove string) *CompileResult {
+func Compile(projectDir string) *CompileResult {
 	cfg := &packages.Config{
 		Mode: packages.NeedName |
 			packages.NeedTypes |
@@ -31,6 +31,12 @@ func Compile(projectDir, pathPrefixToRemove string) *CompileResult {
 	var interfaces []*Interface
 	var structs []*Struct
 	var constructors []*Constructor
+
+	if len(pkgs) == 0 {
+		return nil
+	}
+
+	pathPrefixToRemove := pkgs[0].Module.Path + "/"
 
 	for _, pkg := range pkgs {
 		for _, name := range pkg.Types.Scope().Names() {
@@ -70,6 +76,10 @@ func Compile(projectDir, pathPrefixToRemove string) *CompileResult {
 	}
 
 	log.Println("collected")
+
+	interfaces = lo.Filter(interfaces, func(item *Interface, _ int) bool {
+		return item.NumMethods() > 1
+	})
 
 	structs = lo.Filter(structs, func(item *Struct, _ int) bool {
 		return item.component
